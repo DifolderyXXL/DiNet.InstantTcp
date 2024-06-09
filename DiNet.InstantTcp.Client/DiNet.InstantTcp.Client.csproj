@@ -6,4 +6,18 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="ASiNet.Data.Serialization" Version="4.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Abstraction\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DiNet.InstantTcp.Common\DiNet.InstantTcp.Common.csproj" />
+    <ProjectReference Include="..\DiNet.InstantTcp.Core\DiNet.InstantTcp.Core.csproj" />
+  </ItemGroup>
+
 </Project>
