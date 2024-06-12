@@ -3,17 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiNet.InstantTcp.Client", "DiNet.InstantTcp.Client\DiNet.InstantTcp.Client.csproj", "{B3B4F776-023E-4E75-B183-7ABC81B4D659}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiNet.InstantTcp.Client", "DiNet.InstantTcp.Client\DiNet.InstantTcp.Client.csproj", "{B3B4F776-023E-4E75-B183-7ABC81B4D659}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiNet.InstantTcp.Core", "DiNet.InstantTcp.Core\DiNet.InstantTcp.Core.csproj", "{5E275FB7-00B5-49B2-8495-CB2396EC680D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiNet.InstantTcp.Core", "DiNet.InstantTcp.Core\DiNet.InstantTcp.Core.csproj", "{5E275FB7-00B5-49B2-8495-CB2396EC680D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiNet.InstantTcp.Tests", "DiNet.InstantTcp.Tests\DiNet.InstantTcp.Tests.csproj", "{E93ADF20-02BD-454B-BF9A-CEDD7D7F0D2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiNet.InstantTcp.Tests", "DiNet.InstantTcp.Tests\DiNet.InstantTcp.Tests.csproj", "{E93ADF20-02BD-454B-BF9A-CEDD7D7F0D2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiNet.InstantTcp.Controllers", "DiNet.InstantTcp.Controllers\DiNet.InstantTcp.Controllers.csproj", "{1C5E61EA-9E4C-428D-A519-0D7295478176}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiNet.InstantTcp.Controllers", "DiNet.InstantTcp.Controllers\DiNet.InstantTcp.Controllers.csproj", "{1C5E61EA-9E4C-428D-A519-0D7295478176}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiNet.InstantTcp.Common", "DiNet.InstantTcp.Common\DiNet.InstantTcp.Common.csproj", "{78F34BD6-6B11-49B8-8007-2CF62A896DC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiNet.InstantTcp.Common", "DiNet.InstantTcp.Common\DiNet.InstantTcp.Common.csproj", "{78F34BD6-6B11-49B8-8007-2CF62A896DC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiNet.InstantTcp.Server", "DiNet.InstantTcp.Server\DiNet.InstantTcp.Server.csproj", "{D58B05FF-A849-4FB2-BB4B-1EAB568CEEE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiNet.InstantTcp.Server", "DiNet.InstantTcp.Server\DiNet.InstantTcp.Server.csproj", "{D58B05FF-A849-4FB2-BB4B-1EAB568CEEE5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiNet.Test.InstantServer", "DiNet.Test.InstantServer\DiNet.Test.InstantServer.csproj", "{0A289995-6D62-4AD9-88A3-8393EB747D8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiNet.Test.InstantClient", "DiNet.Test.InstantClient\DiNet.Test.InstantClient.csproj", "{E9EFFFAC-CA83-4642-BC18-76075F60D3A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{D58B05FF-A849-4FB2-BB4B-1EAB568CEEE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D58B05FF-A849-4FB2-BB4B-1EAB568CEEE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D58B05FF-A849-4FB2-BB4B-1EAB568CEEE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A289995-6D62-4AD9-88A3-8393EB747D8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A289995-6D62-4AD9-88A3-8393EB747D8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A289995-6D62-4AD9-88A3-8393EB747D8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A289995-6D62-4AD9-88A3-8393EB747D8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9EFFFAC-CA83-4642-BC18-76075F60D3A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9EFFFAC-CA83-4642-BC18-76075F60D3A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9EFFFAC-CA83-4642-BC18-76075F60D3A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9EFFFAC-CA83-4642-BC18-76075F60D3A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

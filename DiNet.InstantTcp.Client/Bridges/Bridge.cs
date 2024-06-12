@@ -1,10 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using DiNet.InstantTcp.Core;
+using Microsoft.Extensions.Logging;
 using System.Threading.Channels;
 
-namespace DiNet.InstantTcp.Client;
-public class Bridge<T>
+namespace DiNet.InstantTcp.Client.Bridges;
+public class Bridge<TRequest, TResponse>
+    where TRequest : InstantPackageBase
+    where TResponse : InstantPackageBase
 {
-    private readonly Channel<T> _channel;
+    private readonly Channel<TResponse> _channel;
     private readonly ILogger? _logger;
     private readonly TClient _client;
 
@@ -20,11 +23,11 @@ public class Bridge<T>
             SingleReader = true,
             SingleWriter = true,
         };
-            
-        _channel = Channel.CreateBounded<T>(options);
+
+        _channel = Channel.CreateBounded<TResponse>(options);
     }
 
-    internal void AddOnBridge(T obj)
+    internal void AddOnBridge(TResponse obj)
     {
         try
         {
@@ -32,33 +35,33 @@ public class Bridge<T>
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, nameof(Bridge<T>.AddOnBridge));
+            _logger?.LogError(ex, nameof(Bridge<TRequest, TResponse>.AddOnBridge));
         }
     }
 
-    public async Task<T?> Read(CancellationToken token = default)
+    public async Task<TResponse?> Read(CancellationToken token = default)
     {
         try
         {
             return await _channel.Reader.ReadAsync(token);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            _logger?.LogError(ex, nameof(Bridge<T>.Read));
+            _logger?.LogError(ex, nameof(Bridge<TRequest, TResponse>.Read));
             return default;
         }
     }
 
-    public async Task<bool> Write(T obj, CancellationToken token = default)
+    public bool Write(TRequest obj)
     {
         try
         {
-            await _client.SendAsync(obj, token);
+            _client.Send(obj);
             return true;
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, nameof(Bridge<T>.Write));
+            _logger?.LogError(ex, nameof(Bridge<TRequest, TResponse>.Write));
             return false;
         }
     }

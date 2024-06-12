@@ -11,13 +11,14 @@ public class WrapClient : IDisposable
 {
     public bool Connected => IsConnectedCheck();
 
+    private NetworkStream? _networkStream;
+
     public TcpClient TcpClient { get; }
-    public NetworkStream NetworkStream { get; }
+    public NetworkStream? NetworkStream => _networkStream ??= TcpClient.GetStream();
 
     public WrapClient(TcpClient tcpClient)
     {
         TcpClient = tcpClient;
-        NetworkStream = TcpClient.GetStream();
     }
 
     public void Send<T>(T value)
@@ -35,7 +36,9 @@ public class WrapClient : IDisposable
             throw new Exception("Client is not connected.");
 
         if (NetworkStream!.DataAvailable)
+        {
             return BinarySerializer.Deserialize<InstantPackageBase>(NetworkStream) as T;
+        }
         
         return null;
     }

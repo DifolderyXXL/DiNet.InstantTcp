@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DiNet.InstantTcp.Core\DiNet.InstantTcp.Core.csproj" />
     <ProjectReference Include="..\DiNet.InstantTcp.Server\DiNet.InstantTcp.Server.csproj" />
+    <ProjectReference Include="..\DiNet.InstantTcp.Tests\DiNet.InstantTcp.Tests.csproj" />
   </ItemGroup>
 
 </Project>

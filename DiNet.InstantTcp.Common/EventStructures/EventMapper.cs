@@ -1,12 +1,25 @@
-﻿using DiNet.IntantTcp.Common.Generation;
+﻿using DiNet.InstantTcp.Common.Generation;
 
-namespace DiNet.IntantTcp.Common.EventStructures;
+namespace DiNet.InstantTcp.Common.EventStructures;
 public class EventMapper<TBaseKey>
 {
     private Dictionary<Type, Action<object, object>> _callLambdas = [];
     private Dictionary<Type, object> _delegates = [];
 
     public void Add<TKey>(Action<TKey> lambda)
+        where TKey : class, TBaseKey
+    {
+        _delegates.TryAdd(typeof(TKey), new MappedBox<TKey>());
+        (_delegates[typeof(TKey)] as MappedBox<TKey>)!.Subscribe(lambda);
+    }
+
+
+    /// <summary>
+    /// Use to add custom delegate like Action<TKey>
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <param name="lambda"></param>
+    public void AddDelegate<TKey>(Delegate lambda)
         where TKey : class, TBaseKey
     {
         _delegates.TryAdd(typeof(TKey), new MappedBox<TKey>());
@@ -51,7 +64,11 @@ public class MappedBox<T>
 
     public void Invoke(T value)
     {
-        _action?.Invoke(value);
+        if (_action is not null)
+            foreach(var action in _action.GetInvocationList())
+            {
+                action?.DynamicInvoke(value);
+            }
     }
 
     public void Subscribe(Delegate lambda)

@@ -1,9 +1,11 @@
 ﻿using ASiNet.Data.Serialization;
+using DiNet.InstantTcp.Client.Bridges;
 using DiNet.InstantTcp.Client.Primitives;
 using DiNet.InstantTcp.Core;
-using DiNet.IntantTcp.Common.EventStructures;
+using DiNet.InstantTcp.Common.EventStructures;
 using Microsoft.Extensions.Logging;
 using System.Net.Sockets;
+using System;
 
 namespace DiNet.InstantTcp.Client;
 public class TClient
@@ -29,17 +31,56 @@ public class TClient
         _options = options;
     }
 
-    public Bridge<T> GetBridge<T>()
-        where T : InstantPackageBase
+    public Bridge<TRequest, TResponse> GetBridge<TRequest, TResponse>()
+        where TRequest : InstantPackageBase
+        where TResponse : InstantPackageBase
     {
-        Bridge<T>? bridge = null;
-        if (_bridges.ContainsKey(typeof(T)))
-            bridge = _bridges[typeof(T)] as Bridge<T>;
+        Bridge<TRequest, TResponse>? bridge = null;
+        if (_bridges.ContainsKey(typeof(TResponse)))
+            bridge = _bridges[typeof(TResponse)] as Bridge<TRequest, TResponse>;
 
         if (bridge is null)
         {
-            bridge = new Bridge<T>(_options.BridgeCapacity, this, _logger);
-            _bridgeMapper.Add<T>(bridge.AddOnBridge);
+            bridge = new Bridge<TRequest, TResponse>(_options.BridgeCapacity, this, _logger);
+            _bridgeMapper.Add<TResponse>(bridge.AddOnBridge);
+        }
+
+        return bridge;
+    }
+
+    public Bridge<TRequest, InstantResponse<TResponse>> GetInstantBridge<TRequest, TResponse>()
+            where TRequest : InstantPackageBase
+    {
+        return GetBridge<TRequest, InstantResponse<TResponse>>();
+    }
+
+    public EventStackBridge<TEvent> GetEventStackBridge<TEvent>()
+        where TEvent : InstantPackageBase
+    {
+        EventStackBridge<TEvent>? bridge = null;
+        if (_bridges.ContainsKey(typeof(TEvent)))
+            bridge = _bridges[typeof(TEvent)] as EventStackBridge<TEvent>;
+
+        if (bridge is null)
+        {
+            bridge = new EventStackBridge<TEvent>(_options.BridgeCapacity, _logger);
+            _bridgeMapper.Add<TEvent>(bridge.AddOnBridge);
+        }
+
+        return bridge;
+    }
+
+    public EventBridge<TEvent> GetEventBridge<TEvent>()
+        where TEvent : InstantPackageBase
+    {
+        EventBridge<TEvent>? bridge = null;
+        if (_bridges.ContainsKey(typeof(TEvent)))
+            bridge = _bridges[typeof(TEvent)] as EventBridge<TEvent>;
+
+        if (bridge is null)
+        {
+            bridge = new EventBridge<TEvent>(_logger);
+            _bridgeMapper.Add<TEvent>(bridge.AddOnBridge);
         }
 
         return bridge;
@@ -55,7 +96,7 @@ public class TClient
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, nameof(TClient.Send));
+            _logger?.LogError(ex, $"{nameof(TClient.Send)}, {ex.ToString()}");
             return false;
         }
     }
@@ -73,10 +114,11 @@ public class TClient
             var client = new TcpClient();
             await client.ConnectAsync(ip, port, token);
 
+            _client = new(client);
+
             var result = Connected;
             if (result)
             {
-                _client = new(client);
                 ConnectionStateChanged?.Invoke(ConnectionState.Connected);
             }
             
@@ -84,7 +126,7 @@ public class TClient
         }
         catch(Exception ex)
         {
-            _logger?.LogError(ex, nameof(TClient.Connect));
+            _logger?.LogError(ex, $"{nameof(TClient.Connect)}, {ex.ToString()}");
             Disconnect();
             return false;
         }
@@ -127,7 +169,7 @@ public class TClient
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, nameof(TClient.Connect));
+            _logger?.LogError(ex, $"{nameof(TClient.AcceptPackagesAsync)}, {ex.ToString()}");
         }
     }
 

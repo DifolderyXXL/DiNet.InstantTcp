@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace DiNet.IntantTcp.Common.Generation;
+namespace DiNet.InstantTcp.Common.Generation;
 public class MethodQuery
 {
     public MethodQuery(Type type)
@@ -46,6 +46,24 @@ public class MethodQuery
         var instParam = Expression.Parameter(typeof(object));
         var p0Param = Expression.Parameter(typeof(object));
         var lambda = Expression.Lambda<Action<object, object>>(Expression.Call(Expression.Convert(instParam, BaseType), _method!, Expression.Convert(p0Param, p0Type)), instParam, p0Param);
+        return lambda.Compile();
+    }
+
+    public Func<object, object, object> BuildLambdaFunc(Type p0Type)
+    {
+        var instParam = Expression.Parameter(typeof(object));
+        var p0Param = Expression.Parameter(typeof(object));
+        var returnParam = Expression.Parameter(typeof(object));
+        
+        var lambda = Expression.Lambda<Func<object, object, object>>(
+            Expression.Block(
+                [returnParam],
+                Expression.Assign(returnParam,
+                    Expression.Convert(Expression.Call(Expression.Convert(instParam, BaseType), _method!, Expression.Convert(p0Param, p0Type)), typeof(object))
+                ),
+            returnParam
+            ),
+            instParam, p0Param);
         return lambda.Compile();
     }
 
