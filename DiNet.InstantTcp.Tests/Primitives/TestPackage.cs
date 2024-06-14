@@ -6,6 +6,7 @@ namespace DiNet.InstantTcp.Tests.Primitives;
 [PreGenerate]
 public class TestPackage : InstantPackageBase
 {
+
     public string? Message { get; set; }
 }
 

@@ -2,25 +2,14 @@
 using System.Linq.Expressions;
 namespace DiNet.InstantTcp.Server;
 
-public delegate object BuildResponseDelegate(object value);
+public delegate object BuildResponseDelegate(object? value);
 public class ResponseCreator
 {
     private Dictionary<Type, BuildResponseDelegate> _setValueLambdas = [];
 
     public object CreateFor(object value)
     {
-        var type = value.GetType();
-
-        if (!_setValueLambdas.ContainsKey(type))
-        {
-            var responseType = typeof(InstantResponse<>).MakeGenericType(type);
-
-            var lambda = BuildLambda(responseType, type);
-
-            _setValueLambdas.Add(type, lambda);
-        }
-
-        return _setValueLambdas[type].Invoke(value);
+        return CreateFor(value, value.GetType());
     }
 
     public object CreateFor(object? value, Type resultType)
@@ -34,7 +23,7 @@ public class ResponseCreator
             _setValueLambdas.Add(resultType, lambda);
         }
 
-        return _setValueLambdas[resultType].Invoke(value!);
+        return _setValueLambdas[resultType].Invoke(value);
     }
 
     public BuildResponseDelegate BuildLambda(Type baseType, Type valueType)
@@ -46,10 +35,13 @@ public class ResponseCreator
         var newInstance = Expression.Assign(instVar, Expression.New(baseType));
 
         var info = baseType.GetProperty("Value")!;
-        var block = Expression.Assign(Expression.Property(instVar, info), Expression.Convert(p0Param, valueType));
+        var ifCheck = Expression.IfThen(
+                Expression.NotEqual(p0Param, Expression.Constant(null)),
+                Expression.Assign(Expression.Property(instVar, info), Expression.Convert(p0Param, valueType))
+            );
 
         var lambda = Expression.Lambda<BuildResponseDelegate>(
-            Expression.Block([instVar], [newInstance, block, instVar]),
+            Expression.Block([instVar], [newInstance, ifCheck, instVar]),
             p0Param
             );
         return lambda.Compile();

@@ -31,61 +31,38 @@ public class TClient
         _options = options;
     }
 
+    private TBridgeType GetOrCreateBridge<TKey, TBridgeType>(Func<TBridgeType> factory)
+        where TBridgeType : BridgeBase<TKey>
+        where TKey : InstantPackageBase
+    {
+        if (_bridges.ContainsKey(typeof(TKey)))
+            return (TBridgeType)_bridges[typeof(TKey)];
+
+        var newBridge = factory.Invoke();
+        _bridgeMapper.Add<TKey>(newBridge.AddOnBridge);
+        return newBridge;
+    }
+
     public Bridge<TRequest, TResponse> GetBridge<TRequest, TResponse>()
         where TRequest : InstantPackageBase
         where TResponse : InstantPackageBase
-    {
-        Bridge<TRequest, TResponse>? bridge = null;
-        if (_bridges.ContainsKey(typeof(TResponse)))
-            bridge = _bridges[typeof(TResponse)] as Bridge<TRequest, TResponse>;
-
-        if (bridge is null)
-        {
-            bridge = new Bridge<TRequest, TResponse>(_options.BridgeCapacity, this, _logger);
-            _bridgeMapper.Add<TResponse>(bridge.AddOnBridge);
-        }
-
-        return bridge;
-    }
-
+        => GetOrCreateBridge<TResponse, Bridge<TRequest, TResponse>>(
+            () => new Bridge<TRequest, TResponse>(_options.BridgeCapacity, this, _logger));
+    
     public Bridge<TRequest, InstantResponse<TResponse>> GetInstantBridge<TRequest, TResponse>()
-            where TRequest : InstantPackageBase
-    {
-        return GetBridge<TRequest, InstantResponse<TResponse>>();
-    }
+        where TRequest : InstantPackageBase
+        => GetBridge<TRequest, InstantResponse<TResponse>>();
 
     public EventStackBridge<TEvent> GetEventStackBridge<TEvent>()
         where TEvent : InstantPackageBase
-    {
-        EventStackBridge<TEvent>? bridge = null;
-        if (_bridges.ContainsKey(typeof(TEvent)))
-            bridge = _bridges[typeof(TEvent)] as EventStackBridge<TEvent>;
-
-        if (bridge is null)
-        {
-            bridge = new EventStackBridge<TEvent>(_options.BridgeCapacity, _logger);
-            _bridgeMapper.Add<TEvent>(bridge.AddOnBridge);
-        }
-
-        return bridge;
-    }
-
+        => GetOrCreateBridge<TEvent, EventStackBridge<TEvent>>(
+            () => new EventStackBridge<TEvent>(_options.BridgeCapacity, _logger));
+    
     public EventBridge<TEvent> GetEventBridge<TEvent>()
         where TEvent : InstantPackageBase
-    {
-        EventBridge<TEvent>? bridge = null;
-        if (_bridges.ContainsKey(typeof(TEvent)))
-            bridge = _bridges[typeof(TEvent)] as EventBridge<TEvent>;
-
-        if (bridge is null)
-        {
-            bridge = new EventBridge<TEvent>(_logger);
-            _bridgeMapper.Add<TEvent>(bridge.AddOnBridge);
-        }
-
-        return bridge;
-    }
-
+        => GetOrCreateBridge<TEvent, EventBridge<TEvent>>(
+            () => new EventBridge<TEvent>(_logger));
+    
     public bool Send<T>(T value)
          where T : InstantPackageBase
     {
@@ -162,7 +139,9 @@ public class TClient
                 var package = _client!.Read<InstantPackageBase>();
 
                 if (package is not null)
+                {
                     _bridgeMapper.InvokeObj(package);
+                }
                 
                 await Task.Delay(_options.PackagePollDelay, token);
             }

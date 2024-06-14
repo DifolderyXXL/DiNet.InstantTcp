@@ -3,13 +3,13 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Channels;
 
 namespace DiNet.InstantTcp.Client.Bridges;
-public class EventStackBridge<TEvent>
+public class EventStackBridge<TEvent> : BridgeBase<TEvent>
     where TEvent : InstantPackageBase
 {
     public event Action? OnEventAdded;
 
-    private readonly Channel<TEvent> _channel;
-    private readonly ILogger? _logger;
+    protected readonly Channel<TEvent> _channel;
+    protected readonly ILogger? _logger;
 
     public EventStackBridge(int capacity, ILogger? logger = null)
     {
@@ -26,7 +26,7 @@ public class EventStackBridge<TEvent>
         _channel = Channel.CreateBounded<TEvent>(options);
     }
 
-    internal void AddOnBridge(TEvent obj)
+    internal override void AddOnBridge(TEvent obj)
     {
         try
         {

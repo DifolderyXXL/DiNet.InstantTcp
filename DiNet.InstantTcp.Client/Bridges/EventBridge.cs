@@ -2,8 +2,7 @@
 using Microsoft.Extensions.Logging;
 
 namespace DiNet.InstantTcp.Client.Bridges;
-
-public class EventBridge<TEvent>
+public class EventBridge<TEvent> : BridgeBase<TEvent>
     where TEvent : InstantPackageBase
 {
     public event Action<TEvent>? OnEvent;
@@ -15,7 +14,7 @@ public class EventBridge<TEvent>
         _logger = logger;
     }
 
-    internal void AddOnBridge(TEvent obj)
+    internal override void AddOnBridge(TEvent obj)
     {
         try
         {

@@ -10,4 +10,8 @@
     <PackageReference Include="ASiNet.Data.Serialization" Version="4.0.8" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DiNet.InstantTcp.Core\DiNet.InstantTcp.Core.csproj" />
+  </ItemGroup>
+
 </Project>

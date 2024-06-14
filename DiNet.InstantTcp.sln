@@ -9,15 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiNet.InstantTcp.Core", "Di
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiNet.InstantTcp.Tests", "DiNet.InstantTcp.Tests\DiNet.InstantTcp.Tests.csproj", "{E93ADF20-02BD-454B-BF9A-CEDD7D7F0D2F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiNet.InstantTcp.Controllers", "DiNet.InstantTcp.Controllers\DiNet.InstantTcp.Controllers.csproj", "{1C5E61EA-9E4C-428D-A519-0D7295478176}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiNet.InstantTcp.Common", "DiNet.InstantTcp.Common\DiNet.InstantTcp.Common.csproj", "{78F34BD6-6B11-49B8-8007-2CF62A896DC2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiNet.InstantTcp.Server", "DiNet.InstantTcp.Server\DiNet.InstantTcp.Server.csproj", "{D58B05FF-A849-4FB2-BB4B-1EAB568CEEE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiNet.Test.InstantServer", "DiNet.Test.InstantServer\DiNet.Test.InstantServer.csproj", "{0A289995-6D62-4AD9-88A3-8393EB747D8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiNet.Test.InstantServer", "DiNet.Test.InstantServer\DiNet.Test.InstantServer.csproj", "{0A289995-6D62-4AD9-88A3-8393EB747D8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiNet.Test.InstantClient", "DiNet.Test.InstantClient\DiNet.Test.InstantClient.csproj", "{E9EFFFAC-CA83-4642-BC18-76075F60D3A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiNet.Test.InstantClient", "DiNet.Test.InstantClient\DiNet.Test.InstantClient.csproj", "{E9EFFFAC-CA83-4642-BC18-76075F60D3A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +35,6 @@ Global
 		{E93ADF20-02BD-454B-BF9A-CEDD7D7F0D2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E93ADF20-02BD-454B-BF9A-CEDD7D7F0D2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E93ADF20-02BD-454B-BF9A-CEDD7D7F0D2F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C5E61EA-9E4C-428D-A519-0D7295478176}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C5E61EA-9E4C-428D-A519-0D7295478176}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C5E61EA-9E4C-428D-A519-0D7295478176}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C5E61EA-9E4C-428D-A519-0D7295478176}.Release|Any CPU.Build.0 = Release|Any CPU
 		{78F34BD6-6B11-49B8-8007-2CF62A896DC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{78F34BD6-6B11-49B8-8007-2CF62A896DC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78F34BD6-6B11-49B8-8007-2CF62A896DC2}.Release|Any CPU.ActiveCfg = Release|Any CPU

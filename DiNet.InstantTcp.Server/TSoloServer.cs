@@ -1,5 +1,6 @@
 ﻿using DiNet.InstantTcp.Client;
 using DiNet.InstantTcp.Core;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
@@ -20,8 +21,11 @@ public class TSoloServer
 
     private Dictionary<Type, Type> _resultTypes = [];
 
-    public TSoloServer(TServerOptions options)
+    private readonly ILogger? _logger;
+
+    public TSoloServer(TServerOptions options, ILogger? logger = null)
     {
+        _logger = logger;
         _options = options;
 
         _listener = new(IPAddress.Parse(_options.Address!), _options.Port);
@@ -44,21 +48,33 @@ public class TSoloServer
         _listener.Start();
     }
 
+    /// <summary>
+    /// Handles requests from client ans sends InstantResponse<> them
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
     public async Task Updater(CancellationToken token)
     {
         await Task.Run(() =>
         {
             while (!token.IsCancellationRequested)
             {
-                if (_client == null || !_client.Connected)
+                try
                 {
-                    _client = new(_listener.AcceptTcpClient());
+                    if (_client == null || !_client.Connected)
+                    {
+                        _client = new(_listener.AcceptTcpClient());
+                    }
+                    else
+                    {
+                        var package = _client.Read<InstantPackageBase>();
+                        if (package is not null)
+                            ProcessRecievedPackage(package);
+                    }
                 }
-                else
+                catch(Exception ex)
                 {
-                    var package = _client.Read<InstantPackageBase>();
-                    if (package is not null)
-                        ProcessRecievedPackage(package);
+                    _logger?.LogError(ex, $"{nameof(Updater)}, {ex.ToString()}");
                 }
                 Task.Delay(_options.ServerUpdateDelay);
             }
@@ -82,6 +98,8 @@ public class TSoloServer
             response = (_responseCreator.CreateFor(null, _resultTypes[packageType]) as InstantResponseBase)!;
             response.ResponseType = Core.Enums.ResponseType.Exception;
             response.Exception = ex.ToString();
+
+            _logger?.LogWarning(ex, $"{nameof(ProcessRecievedPackage)}, {ex.ToString()}");
         }
 
         response.TargetPackageId = package.Id;
@@ -92,8 +110,7 @@ public class TSoloServer
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex);
-            Console.WriteLine(ex);
+            _logger?.LogError(ex, $"{nameof(ProcessRecievedPackage)}, {ex.ToString()}");
         }
     }
 
