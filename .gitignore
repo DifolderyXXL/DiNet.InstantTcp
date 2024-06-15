@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/DiNet.Test.InstantServer/DiNet.Test.InstantServer.csproj
+/DiNet.Test.InstantClient/DiNet.Test.InstantClient.csproj
+/DiNet.InstantTcp.Tests/DiNet.InstantTcp.Tests.csproj
